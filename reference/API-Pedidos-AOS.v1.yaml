@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+  title: API Pedidos AOS
+  version: '1.0'
+servers:
+  - url: 'http://localhost:80'
+paths: {}
+components:
+  schemas:
+    Pedido:
+      title: Pedido
+      type: object
+      properties:
+          pedido:
+              type: object
+              properties:
+                  idPedido:
+                      type: integer
+                      format: int64
+                      example: 111111111
+                      minimum: 1
+                  tipo:
+                      type: string
+                      description: indica si es pedido de compra o de venta
+                      enum:
+                          - "compra"
+                          - "venta"
+                  producto:
+                      $ref: "#/components/schemas/Producto"
+                  organizacion:
+                      $ref: "#/components/schemas/Organizacion"
+                  cantidad:
+                      type: integer
+                      format: int32
+                      example: 23
+                      minimum: 1
+                  fechaCompra:
+                      type: string
+                      format: "date-time"
+                  estado:
+                      type: string
+                      description: estado del pedido
+                      enum:
+                          - "abierto"
+                          - "aceptado"
+                          - "enviado"
+                          - "recibido"
+                  _links:
+                      type: object
+                      description: link relations
+                      properties:
+                          parent: 
+                            type: object
+                            properties: {"href": { "type": "string", "format": "url" }}
+                          self:
+                            type: object
+                            properties: {"href": { "type": "string", "format": "url" }}
+    Producto:
+      title: Producto
+      type: object
+      properties:
+        producto:
+          type: object
+          properties:
+            idProducto:
+              type: integer
+              format: int64
+              example: 123456789
+              minimum: 1
+            descripcion:
+              type: string
+            categoria:
+              $ref: '#/components/schemas/Categoria'
+            _links:
+              type: object
+              description: link relations
+              properties:
+                parent:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: url
+                self:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: url
+    Categoria:
+      title: Categoria
+      type: object
+      properties:
+        categoria:
+          type: object
+          properties:
+            idCategoria:
+              type: integer
+              format: int64
+              example: 123456789
+              minimum: 1
+            descripcion:
+              type: string
+            _links:
+              type: object
+              description: link relations
+              properties:
+                parent: 
+                  type: object
+                  properties: {"href": { "type": "string", "format": "url" }}
+                self:
+                  type: object
+                  properties: {"href": { "type": "string", "format": "url" }}
+    Organizacion:
+      title: Organización
+      type: object
+      properties:
+        organizacion:
+          type: object
+          properties:
+            idOrganizacion:
+              type: integer
+              format: int64
+              example: 32165478
+            nombre: { "type": "string" }
+            descripcion: { "type": "string" }
+            teléfono: { "type": "string" }
+            e-mail: { "type": "string", "format": "email" }
+            direccionPostal:
+              type: object
+              description: Dirección postal
+              properties:
+                calle: { "type": "string" }
+                localidad: { "type": "string" }
+                provincia: { "type": "string" }
+                codPostal: { "type": "string", "example": "28031" }
+                país: { "type": "string" }
+            _links:
+              type: object
+              description: link relations
+              properties:
+                parent:
+                  type: object
+                  properties: {"href": { "type": "string", "format": "url" }}
+                self:
+                  type: object
+                  properties: {"href": { "type": "string", "format": "url" }}
