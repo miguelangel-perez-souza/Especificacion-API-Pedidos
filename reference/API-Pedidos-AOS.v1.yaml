@@ -2,59 +2,74 @@ openapi: 3.0.0
 info:
   title: API Pedidos AOS
   version: '1.0'
+  description: "API de Pedidos para Arquitecturas Orientadas a Servicios desarrollada por:\nSantiago Caro, \nMiguel Angel Perez &\nIván Pulido"
 servers:
-  - url: 'http://localhost:80'
-paths: {}
-components:
-  schemas:
-    Pedido:
-      title: Pedido
-      type: object
-      properties:
-          pedido:
+  - url: '{schema}://{servername}:{port}'
+    variables:
+      schema:
+        enum:
+          - http
+          - https
+        default: http
+      servername:
+        default: localhost
+      port:
+        default: '80'
+paths:
+  /pedidos:
+    get:
+      summary: Obtener Pedidos
+      tags:
+        - pedidos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pedidos:
+                    type: array
+                    uniqueItems: false
+                    items:
+                      $ref: '#/components/schemas/Pedido'
+          headers: {}
+        '404':
+          description: Not Found
+      operationId: get-pedido
+      description: Retorna una Lista de pedidos completa
+    post:
+      summary: Crear nuevo Pedido
+      operationId: post-pedidos
+      responses:
+        '200':
+          description: OK
+        '409':
+          description: Conflict
+      description: Añade un Pedido a la lista de Pedidos con sus respectivos Campos
+      requestBody:
+        content:
+          application/json:
+            schema:
               type: object
               properties:
-                  idPedido:
-                      type: integer
-                      format: int64
-                      example: 111111111
-                      minimum: 1
-                  tipo:
-                      type: string
-                      description: indica si es pedido de compra o de venta
-                      enum:
-                          - "compra"
-                          - "venta"
-                  producto:
-                      $ref: "#/components/schemas/Producto"
-                  organizacion:
-                      $ref: "#/components/schemas/Organizacion"
-                  cantidad:
-                      type: integer
-                      format: int32
-                      example: 23
-                      minimum: 1
-                  fechaCompra:
-                      type: string
-                      format: "date-time"
-                  estado:
-                      type: string
-                      description: estado del pedido
-                      enum:
-                          - "abierto"
-                          - "aceptado"
-                          - "enviado"
-                          - "recibido"
-                  _links:
-                      type: object
-                      description: link relations
-                      properties:
-                          parent: 
-                            type: object
-                            properties: {"href": { "type": "string", "format": "url" }}
-                          self:
-                            type: object
-                            properties: {"href": { "type": "string", "format": "url" }}
+                pedido:
+                  $ref: '#/components/schemas/Pedido'
+    options:
+      summary: Opciones soportadas
+      operationId: options-pedidos
+      description: Provee una lista de los metodos HTTP soportados
+      responses:
+        '200':
+          description: OK
+          headers:
+            Allow:
+              schema:
+                type: string
+              description: Cabecera Allow en donde van las operacions
+components:
+  schemas:
     Producto:
       title: Producto
       type: object
@@ -87,6 +102,7 @@ components:
                     href:
                       type: string
                       format: url
+      x-examples: {}
     Categoria:
       title: Categoria
       type: object
@@ -105,12 +121,72 @@ components:
               type: object
               description: link relations
               properties:
-                parent: 
+                parent:
                   type: object
-                  properties: {"href": { "type": "string", "format": "url" }}
+                  properties:
+                    href:
+                      type: string
+                      format: url
                 self:
                   type: object
-                  properties: {"href": { "type": "string", "format": "url" }}
+                  properties:
+                    href:
+                      type: string
+                      format: url
+    Pedido:
+      title: Pedido
+      type: object
+      properties:
+        pedido:
+          type: object
+          properties:
+            idPedido:
+              type: integer
+              format: int64
+              example: 111111111
+              minimum: 1
+            tipo:
+              type: string
+              description: indica si es pedido de compra o de venta
+              enum:
+                - compra
+                - venta
+            producto:
+              $ref: '#/components/schemas/Producto'
+            cantidad:
+              type: integer
+              format: int32
+              example: 23
+              minimum: 1
+            fechaCompra:
+              type: string
+              format: date-time
+            estado:
+              type: string
+              description: estado del pedido
+              enum:
+                - abierto
+                - aceptado
+                - enviado
+                - recibido
+            _links:
+              type: object
+              description: link relations
+              properties:
+                parent:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: url
+                self:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: url
+            organizacion:
+              $ref: '#/components/schemas/Organizacion'
     Organizacion:
       title: Organización
       type: object
@@ -122,26 +198,85 @@ components:
               type: integer
               format: int64
               example: 32165478
-            nombre: { "type": "string" }
-            descripcion: { "type": "string" }
-            teléfono: { "type": "string" }
-            e-mail: { "type": "string", "format": "email" }
+            nombre:
+              type: string
+            descripcion:
+              type: string
+            teléfono:
+              type: string
+            e-mail:
+              type: string
+              format: email
             direccionPostal:
               type: object
               description: Dirección postal
               properties:
-                calle: { "type": "string" }
-                localidad: { "type": "string" }
-                provincia: { "type": "string" }
-                codPostal: { "type": "string", "example": "28031" }
-                país: { "type": "string" }
+                calle:
+                  type: string
+                localidad:
+                  type: string
+                provincia:
+                  type: string
+                codPostal:
+                  type: string
+                  example: '28031'
+                país:
+                  type: string
             _links:
               type: object
               description: link relations
               properties:
                 parent:
                   type: object
-                  properties: {"href": { "type": "string", "format": "url" }}
+                  properties:
+                    href:
+                      type: string
+                      format: url
                 self:
                   type: object
-                  properties: {"href": { "type": "string", "format": "url" }}
+                  properties:
+                    href:
+                      type: string
+                      format: url
+    Evento:
+      title: Evento
+      type: object
+      properties:
+        evento:
+          type: object
+          properties:
+            idEvento:
+              type: integer
+              format: int64
+              example: 878923748
+              minimum: 1
+            origen:
+              type: string
+              example: PEDIDOS
+            fecha:
+              type: string
+              format: date-time
+            mensaje:
+              type: string
+            nivel:
+              type: string
+              enum:
+                - info
+                - warn
+                - error
+            _links:
+              type: object
+              description: link relations
+              properties:
+                parent:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: url
+                self:
+                  type: object
+                  properties:
+                    href:
+                      type: string
+                      format: url
