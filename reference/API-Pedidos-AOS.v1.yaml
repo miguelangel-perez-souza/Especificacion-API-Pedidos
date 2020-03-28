@@ -68,6 +68,82 @@ paths:
               schema:
                 type: string
               description: Cabecera Allow en donde van las operacions
+  '/pedidos/{idPedido}':
+    parameters:
+      - schema:
+          type: string
+        name: idPedido
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - pedidos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '':
+                    $ref: '#/components/schemas/Pedido'
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+          headers: {}
+        '400':
+          description: idPedido no valido
+        '404':
+          description: Pedido no encontrado
+      operationId: get-pedidos-id_pedido
+      description: Obtiene la información de un producto existente
+    put:
+      summary: ''
+      operationId: put-pedidos-id_pedido
+      description: Actualiza el pedido identificado por id_pedido
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                '':
+                  $ref: '#/components/schemas/Pedido'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: ''
+      parameters: []
+      responses:
+        '202':
+          description: Accepted
+    delete:
+      summary: ''
+      operationId: delete-pedidos-id_pedido
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: idPedido no valido
+        '404':
+          description: idPedido no encontrado
+      description: Elimina un pedido existente
+    options:
+      summary: ''
+      operationId: options-pedidos-idPedido
+      responses:
+        '200':
+          description: OK
+          headers:
+            Allow:
+              schema:
+                type: string
+              description: 'Lista de metodos HTTP soportados'
+      description: Devuelve la lista de métodos soportados HTTP
 components:
   schemas:
     Producto:
