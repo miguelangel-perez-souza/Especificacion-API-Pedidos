@@ -14,7 +14,7 @@ servers:
       servername:
         default: localhost
       port:
-        default: '80'
+        default: '3100'
 paths:
   /pedidos:
     get:
@@ -31,9 +31,10 @@ paths:
                 properties:
                   pedidos:
                     type: array
-                    uniqueItems: false
                     items:
                       $ref: '#/components/schemas/Pedido'
+                required:
+                  - pedidos
           headers: {}
         '404':
           description: Not Found
@@ -45,6 +46,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
         '409':
           description: Conflict
       description: Añade un Pedido a la lista de Pedidos con sus respectivos Campos
@@ -53,9 +58,6 @@ paths:
           application/json:
             schema:
               type: object
-              properties:
-                pedido:
-                  $ref: '#/components/schemas/Pedido'
     options:
       summary: Opciones soportadas
       operationId: options-pedidos
@@ -70,11 +72,8 @@ paths:
               description: Cabecera Allow en donde van las operacions
   '/pedidos/{idPedido}':
     parameters:
-      - schema:
-          type: string
-        name: idPedido
-        in: path
-        required: true
+      - $ref: '#/components/parameters/idEquipo'
+      - $ref: '#/components/parameters/idPedido'
     get:
       summary: Your GET endpoint
       tags:
@@ -142,7 +141,7 @@ paths:
             Allow:
               schema:
                 type: string
-              description: 'Lista de metodos HTTP soportados'
+              description: Lista de metodos HTTP soportados
       description: Devuelve la lista de métodos soportados HTTP
 components:
   schemas:
@@ -356,3 +355,11 @@ components:
                     href:
                       type: string
                       format: url
+  parameters:
+    idPedido:
+      name: idPedido
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
