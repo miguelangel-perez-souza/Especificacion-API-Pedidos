@@ -33,7 +33,9 @@ paths:
                       $ref: '#/components/schemas/Pedido'
                 required:
                   - pedidos
-          headers: {}
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '404':
           description: Not Found
       operationId: get-pedido
@@ -87,7 +89,10 @@ paths:
               schema:
                 type: object
                 properties: {}
-          headers: {}
+          headers:
+            Etag:
+              schema:
+                type: string
         '400':
           description: idPedido no valido
         '404':
@@ -253,8 +258,7 @@ paths:
                     $ref: '#/components/schemas/Producto'
           headers:
             Etag:
-              schema:
-                type: string
+              $ref: '#/components/headers/ETag'
         '401':
           $ref: '#/components/responses/401_logeado'
         '403':
