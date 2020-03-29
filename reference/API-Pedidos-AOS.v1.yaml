@@ -19,8 +19,6 @@ paths:
   /pedidos:
     get:
       summary: Obtener Pedidos
-      tags:
-        - pedidos
       responses:
         '200':
           description: OK
@@ -40,24 +38,24 @@ paths:
           description: Not Found
       operationId: get-pedido
       description: Retorna una Lista de pedidos completa
+      tags:
+        - Pedidos
     post:
       summary: Crear nuevo Pedido
       operationId: post-pedidos
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pedido'
+        '201':
+          $ref: '#/components/responses/201_addOk'
         '409':
-          description: Conflict
+          $ref: '#/components/responses/409_addError'
       description: Añade un Pedido a la lista de Pedidos con sus respectivos Campos
       requestBody:
         content:
           application/json:
             schema:
               type: object
+      tags:
+        - Pedidos
     options:
       summary: Opciones soportadas
       operationId: options-pedidos
@@ -72,12 +70,9 @@ paths:
               description: Cabecera Allow en donde van las operacions
   '/pedidos/{idPedido}':
     parameters:
-      - $ref: '#/components/parameters/idEquipo'
       - $ref: '#/components/parameters/idPedido'
     get:
-      summary: Your GET endpoint
-      tags:
-        - pedidos
+      summary: Informacion de un pedido en concreto
       responses:
         '200':
           description: OK
@@ -87,7 +82,7 @@ paths:
                 type: object
                 properties:
                   '':
-                    $ref: '#/components/schemas/Pedido'
+                    type: string
             application/xml:
               schema:
                 type: object
@@ -100,7 +95,7 @@ paths:
       operationId: get-pedidos-id_pedido
       description: Obtiene la información de un producto existente
     put:
-      summary: ''
+      summary: Actualizar Pedido
       operationId: put-pedidos-id_pedido
       description: Actualiza el pedido identificado por id_pedido
       requestBody:
@@ -120,6 +115,8 @@ paths:
       responses:
         '202':
           description: Accepted
+      tags:
+        - Pedidos
     delete:
       summary: ''
       operationId: delete-pedidos-id_pedido
@@ -131,6 +128,8 @@ paths:
         '404':
           description: idPedido no encontrado
       description: Elimina un pedido existente
+      tags:
+        - Pedidos
     options:
       summary: ''
       operationId: options-pedidos-idPedido
@@ -143,6 +142,167 @@ paths:
                 type: string
               description: Lista de metodos HTTP soportados
       description: Devuelve la lista de métodos soportados HTTP
+  '/productos/stock_produto/{idProducto}':
+    get:
+      operationId: get-pedidos-stock_produto
+      description: Obtiene el stock de un producto en concreto
+      parameters:
+        - $ref: '#/components/schemas/Producto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stock:
+                    type: integer
+              examples:
+                ejemplo:
+                  value:
+                    stock: 10
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
+        '404':
+          description: Pedido no encontrado
+      summary: Numero de unidades (stock) de una producto
+      tags:
+        - Productos Stock
+    parameters:
+      - schema:
+          type: string
+        name: idProducto
+        in: path
+        required: true
+    options:
+      summary: Operaciones sobre
+      operationId: options-pedidos-stock_produto-idProducto
+      responses:
+        '200':
+          description: OK
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+      description: Devuelve la lista de métodos soportados HTTP
+      tags:
+        - Productos Stock
+  /productos:
+    get:
+      summary: Lista de productos
+      tags:
+        - Productos
+      responses:
+        '200':
+          description: OK
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Producto'
+                type: array
+        '401':
+          $ref: '#/components/responses/401_logeado'
+        '403':
+          $ref: '#/components/responses/403_permisos'
+      operationId: get-productos
+      description: Listado de productos
+    post:
+      summary: Añadir producto
+      operationId: post-productos
+      responses:
+        '201':
+          $ref: '#/components/responses/401_logeado'
+        '409':
+          $ref: '#/components/responses/409_addError'
+      description: Añade producto
+      requestBody:
+        $ref: '#/components/requestBodies/ProductosRequest'
+      tags:
+        - Productos
+    options:
+      summary: Operaciones sobre
+      operationId: options-productos
+      responses:
+        '200':
+          description: OK
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+      tags:
+        - Productos
+      description: Devuelve la lista de métodos soportados HTTP
+  '/productos/{idProducto}':
+    parameters:
+      - $ref: '#/components/parameters/idProducto'
+    get:
+      summary: Datos de un producto
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '':
+                    $ref: '#/components/schemas/Producto'
+          headers:
+            Etag:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/401_logeado'
+        '403':
+          $ref: '#/components/responses/403_permisos'
+      operationId: get-productos-idProducto
+      description: Datos de un producto en concreto
+      tags:
+        - Productos Concretos
+    put:
+      summary: Modificar Producto
+      operationId: put-productos-idProducto
+      responses:
+        '200':
+          description: OK
+        '201':
+          $ref: '#/components/responses/201_addOk'
+        '409':
+          $ref: '#/components/responses/409_addError'
+      description: Modificar Producto
+      tags:
+        - Productos Concretos
+    delete:
+      summary: Borrar producto
+      operationId: delete-productos-idProducto
+      responses:
+        '204':
+          $ref: '#/components/responses/204_deleteOk'
+        '401':
+          $ref: '#/components/responses/401_logeado'
+        '403':
+          $ref: '#/components/responses/403_permisos'
+        '404':
+          $ref: '#/components/responses/404_noEncontrado'
+      description: Borrado de producto
+      tags:
+        - Productos Concretos
+    options:
+      summary: Operaciones sobre
+      operationId: options-productos-idProducto
+      responses:
+        '200':
+          description: OK
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+      description: Devuelve la lista de métodos soportados HTTP
+      tags:
+        - Productos Concretos
 components:
   schemas:
     Producto:
@@ -177,7 +337,12 @@ components:
                     href:
                       type: string
                       format: url
-      x-examples: {}
+      example:
+        idProducto: 1
+        descripcion: Bici molona
+        categoria:
+          idCategoria: 1
+          descripcion: Deporte
     Categoria:
       title: Categoria
       type: object
@@ -355,6 +520,22 @@ components:
                     href:
                       type: string
                       format: url
+    Message:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          description: Codigo
+          type: integer
+          format: int64
+        message:
+          description: Mensaje
+          type: string
+      example:
+        code: 200
+        message: Ok
   parameters:
     idPedido:
       name: idPedido
@@ -363,3 +544,84 @@ components:
       schema:
         type: integer
         format: int64
+    idProducto:
+      name: idProducto
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+  headers:
+    ETag:
+      $ref: '#/components/headers/ETag'
+    Allow:
+      description: Lista de metodos HTTP soportados
+      schema:
+        type: string
+  responses:
+    401_logeado:
+      description: No esta identificado como usuario
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example:
+            code: 401
+            message: No esta identificado como usuario
+    403_permisos:
+      description: No posee permisos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example:
+            code: 403
+            message: No posee permisos
+    404_noEncontrado:
+      description: No encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example:
+            code: 404
+            message: No encontrado
+    409_addError:
+      description: 'Error al añadir, no añadido'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example:
+            code: 409
+            message: 'Error al añadir, no añadido'
+    201_addOk:
+      description: Añadido correcto
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Producto'
+    204_deleteOk:
+      description: BorradoCorrecto
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+          example:
+            code: 204
+            message: Borrado correcto
+  requestBodies:
+    PedidosRequest:
+      description: Pedido
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pedido'
+    ProductosRequest:
+      description: Producto
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Producto'
