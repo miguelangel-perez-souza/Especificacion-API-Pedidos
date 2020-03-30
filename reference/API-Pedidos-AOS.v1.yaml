@@ -33,14 +33,16 @@ paths:
               $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO"
+                origen: PEDIDO
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
-        '404':
-          description: Not Found
+                nivel: info
+        '401':
+          $ref: '#/components/responses/401_logeado'
+        '403':
+          $ref: '#/components/responses/403_permisos'
       operationId: get-pedido
       description: Retorna una Lista de pedidos completa
       tags:
@@ -93,12 +95,12 @@ paths:
               description: Cabecera Allow en donde van las operacions
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO"
+                origen: PEDIDO
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
       tags:
         - Pedidos
     post:
@@ -139,12 +141,12 @@ paths:
                 type: string
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO/{ID_PEDIDO}"
+                origen: 'PEDIDO/{ID_PEDIDO}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
         '400':
           description: idPedido no valido
         '404':
@@ -176,12 +178,12 @@ paths:
           description: Accepted
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO/{ID_PEDIDO}"
+                origen: 'PEDIDO/{ID_PEDIDO}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
       tags:
         - Pedidos
     delete:
@@ -192,32 +194,32 @@ paths:
           description: OK
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO/{ID_PEDIDO}"
+                origen: 'PEDIDO/{ID_PEDIDO}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
         '400':
           description: idPedido no valido
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO/{ID_PEDIDO}"
+                origen: 'PEDIDO/{ID_PEDIDO}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "warn"
+                nivel: warn
         '404':
           description: idPedido no encontrado
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO/{ID_PEDIDO}"
+                origen: 'PEDIDO/{ID_PEDIDO}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "error"
+                nivel: error
       description: Elimina un pedido existente
       tags:
         - Pedidos
@@ -234,12 +236,12 @@ paths:
               description: Lista de metodos HTTP soportados
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "PEDIDO/{ID_PEDIDO}"
+                origen: 'PEDIDO/{ID_PEDIDO}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
       description: Devuelve la lista de métodos soportados HTTP
       tags:
         - Pedidos
@@ -266,12 +268,12 @@ paths:
                     stock: 10
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "/PRODUCTOS/STOCK_PRODUCTO/{idProducto}"
+                origen: '/PRODUCTOS/STOCK_PRODUCTO/{idProducto}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
           headers:
             Etag:
               $ref: '#/components/headers/ETag'
@@ -279,12 +281,12 @@ paths:
           description: Pedido no encontrado
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "/PRODUCTOS/STOCK_PRODUCTO/{idProducto}"
+                origen: '/PRODUCTOS/STOCK_PRODUCTO/{idProducto}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "error"
+                nivel: error
       summary: Numero de unidades (stock) de una producto
       tags:
         - Productos
@@ -325,12 +327,12 @@ paths:
                 type: array
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "/PRODUCTOS"
+                origen: /PRODUCTOS
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
         '401':
           $ref: '#/components/responses/401_logeado'
         '403':
@@ -361,12 +363,12 @@ paths:
               $ref: '#/components/headers/Allow'
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "/PRODUCTOS"
+                origen: /PRODUCTOS
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
       tags:
         - Productos
       description: Devuelve la lista de métodos soportados HTTP
@@ -387,12 +389,12 @@ paths:
                     $ref: '#/components/schemas/Producto'
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "/PRODUCTOS/{idProducto}"
+                origen: '/PRODUCTOS/{idProducto}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
           headers:
             Etag:
               $ref: '#/components/headers/ETag'
@@ -412,12 +414,12 @@ paths:
           description: OK
           links:
             SaveEvent:
-              operationId: get-registrarEvento
+              operationId: post-registrarEvento
               parameters:
-                origen: "/PRODUCTOS/{idProducto}"
+                origen: '/PRODUCTOS/{idProducto}'
                 fecha: $response.header.date
                 mensaje: $response.body
-                nivel: "info"
+                nivel: info
         '201':
           $ref: '#/components/responses/201_addOk'
         '409':
@@ -452,14 +454,18 @@ paths:
       description: Devuelve la lista de métodos soportados HTTP
       tags:
         - Productos
-  /registrarEvento:
+  /eventos:
     parameters: []
-    get:
+    post:
       summary: ''
-      operationId: get-registrarEvento
+      operationId: post-registrarEvento
       responses:
         '200':
           description: OK
+        '401':
+          $ref: '#/components/responses/401_logeado'
+        '403':
+          $ref: '#/components/responses/403_permisos'
       parameters:
         - schema:
             type: string
@@ -487,6 +493,45 @@ paths:
           required: true
       tags:
         - Eventos
+    get:
+      summary: ''
+      operationId: get-eventos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evento'
+        '401':
+          $ref: '#/components/responses/401_logeado'
+        '403':
+          $ref: '#/components/responses/403_permisos'
+  '/evento/{idEvento}':
+    parameters:
+      - schema:
+          type: string
+        name: idEvento
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+          headers: {}
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      operationId: get-evento-idEvento
 components:
   schemas:
     Producto:
@@ -758,13 +803,13 @@ components:
             code: 401
             message: No esta identificado como usuario
       links:
-            SaveEvent:
-              operationId: get-registrarEvento
-              parameters:
-                origen: $url
-                fecha: $response.header.date
-                mensaje: $response.body
-                nivel: "error"
+        SaveEvent:
+          operationId: post-registrarEvento
+          parameters:
+            origen: $url
+            fecha: $response.header.date
+            mensaje: $response.body
+            nivel: error
     403_permisos:
       description: No posee permisos
       content:
@@ -775,13 +820,13 @@ components:
             code: 403
             message: No posee permisos
       links:
-            SaveEvent:
-              operationId: get-registrarEvento
-              parameters:
-                origen: $url
-                fecha: $response.header.date
-                mensaje: $response.body
-                nivel: "error"
+        SaveEvent:
+          operationId: post-registrarEvento
+          parameters:
+            origen: $url
+            fecha: $response.header.date
+            mensaje: $response.body
+            nivel: error
     404_noEncontrado:
       description: No encontrado
       content:
@@ -792,13 +837,13 @@ components:
             code: 404
             message: No encontrado
       links:
-            SaveEvent:
-              operationId: get-registrarEvento
-              parameters:
-                origen: $url
-                fecha: $response.header.date
-                mensaje: $response.body
-                nivel: "error"
+        SaveEvent:
+          operationId: post-registrarEvento
+          parameters:
+            origen: $url
+            fecha: $response.header.date
+            mensaje: $response.body
+            nivel: error
     409_addError:
       description: 'Error al añadir, no añadido'
       content:
@@ -809,13 +854,13 @@ components:
             code: 409
             message: 'Error al añadir, no añadido'
       links:
-            SaveEvent:
-              operationId: get-registrarEvento
-              parameters:
-                origen: $url
-                fecha: $response.header.date
-                mensaje: $response.body
-                nivel: "error"
+        SaveEvent:
+          operationId: post-registrarEvento
+          parameters:
+            origen: $url
+            fecha: $response.header.date
+            mensaje: $response.body
+            nivel: error
     201_addOk:
       description: Añadido correcto
       content:
@@ -823,13 +868,13 @@ components:
           schema:
             $ref: '#/components/schemas/Producto'
       links:
-            SaveEvent:
-              operationId: get-registrarEvento
-              parameters:
-                origen: $url
-                fecha: $response.header.date
-                mensaje: $response.body
-                nivel: "info"
+        SaveEvent:
+          operationId: post-registrarEvento
+          parameters:
+            origen: $url
+            fecha: $response.header.date
+            mensaje: $response.body
+            nivel: info
     204_deleteOk:
       description: BorradoCorrecto
       content:
@@ -837,13 +882,13 @@ components:
           schema:
             $ref: '#/components/schemas/Message'
       links:
-            SaveEvent:
-              operationId: get-registrarEvento
-              parameters:
-                origen: $url
-                fecha: $response.header.date
-                mensaje: $response.body
-                nivel: "info"
+        SaveEvent:
+          operationId: post-registrarEvento
+          parameters:
+            origen: $url
+            fecha: $response.header.date
+            mensaje: $response.body
+            nivel: info
       headers:
         Location:
           description: '`uri` al nuevo recurso generado'
