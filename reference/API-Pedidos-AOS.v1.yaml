@@ -42,22 +42,40 @@ paths:
       description: Retorna una Lista de pedidos completa
       tags:
         - Pedidos
-    post:
-      summary: Crear nuevo Pedido
-      operationId: post-pedidos
-      responses:
-        '201':
-          $ref: '#/components/responses/201_addOk'
-        '409':
-          $ref: '#/components/responses/409_addError'
-      description: Añade un Pedido a la lista de Pedidos con sus respectivos Campos
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-      tags:
-        - Pedidos
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - compra
+              - venta
+          in: query
+          name: tipo
+        - schema:
+            type: string
+            enum:
+              - aceptado
+              - enviado
+              - recibido
+              - abierto
+          in: query
+          name: estado
+        - schema:
+            type: integer
+            minimum: 1
+          in: query
+          name: producto
+          description: ''
+        - schema:
+            type: string
+            enum:
+              - cliente
+              - proveedor
+          in: query
+          name: organizacion
+        - schema:
+            type: string
+          in: query
+          name: texto
     options:
       summary: Opciones soportadas
       operationId: options-pedidos
@@ -70,6 +88,24 @@ paths:
               schema:
                 type: string
               description: Cabecera Allow en donde van las operacions
+      tags:
+        - Pedidos
+    post:
+      summary: Añadir Pedidos
+      operationId: post-pedidos
+      responses:
+        '201':
+          $ref: '#/components/responses/201_addOk'
+        '409':
+          $ref: '#/components/responses/409_addError'
+      description: Añade un pedido con sus datos
+      tags:
+        - Pedidos
+      requestBody:
+        $ref: '#/components/requestBodies/PedidoRequestBody'
+      headers:
+        Etag:
+          $ref: '#/components/headers/ETag'
   '/pedidos/{idPedido}':
     parameters:
       - $ref: '#/components/parameters/idPedido'
@@ -83,8 +119,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  '':
-                    type: string
+                  pedido:
+                    $ref: '#/components/schemas/Pedido'
             application/xml:
               schema:
                 type: object
@@ -99,6 +135,8 @@ paths:
           description: Pedido no encontrado
       operationId: get-pedidos-id_pedido
       description: Obtiene la información de un producto existente
+      tags:
+        - Pedidos
     put:
       summary: Actualizar Pedido
       operationId: put-pedidos-id_pedido
@@ -109,7 +147,7 @@ paths:
             schema:
               type: object
               properties:
-                '':
+                pedido:
                   $ref: '#/components/schemas/Pedido'
           application/xml:
             schema:
@@ -147,6 +185,8 @@ paths:
                 type: string
               description: Lista de metodos HTTP soportados
       description: Devuelve la lista de métodos soportados HTTP
+      tags:
+        - Pedidos
   '/productos/stock_produto/{idProducto}':
     get:
       operationId: get-pedidos-stock_produto
@@ -174,7 +214,7 @@ paths:
           description: Pedido no encontrado
       summary: Numero de unidades (stock) de una producto
       tags:
-        - Productos Stock
+        - Productos
     parameters:
       - schema:
           type: string
@@ -192,7 +232,7 @@ paths:
               $ref: '#/components/headers/Allow'
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Productos Stock
+        - Productos
   /productos:
     get:
       summary: Lista de productos
@@ -221,7 +261,7 @@ paths:
       operationId: post-productos
       responses:
         '201':
-          $ref: '#/components/responses/401_logeado'
+          $ref: '#/components/responses/201_addOk'
         '409':
           $ref: '#/components/responses/409_addError'
       description: Añade producto
@@ -266,7 +306,7 @@ paths:
       operationId: get-productos-idProducto
       description: Datos de un producto en concreto
       tags:
-        - Productos Concretos
+        - Productos
     put:
       summary: Modificar Producto
       operationId: put-productos-idProducto
@@ -279,7 +319,7 @@ paths:
           $ref: '#/components/responses/409_addError'
       description: Modificar Producto
       tags:
-        - Productos Concretos
+        - Productos
     delete:
       summary: Borrar producto
       operationId: delete-productos-idProducto
@@ -294,7 +334,7 @@ paths:
           $ref: '#/components/responses/404_noEncontrado'
       description: Borrado de producto
       tags:
-        - Productos Concretos
+        - Productos
     options:
       summary: Operaciones sobre
       operationId: options-productos-idProducto
@@ -306,15 +346,22 @@ paths:
               $ref: '#/components/headers/Allow'
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Productos Concretos
+        - Productos
 components:
   schemas:
     Producto:
       title: Producto
       type: object
+      example:
+        idProducto: 1
+        descripcion: Bici molona
+        categoria:
+          idCategoria: 1
+          descripcion: Deporte
       properties:
         producto:
           type: object
+          minProperties: 1
           properties:
             idProducto:
               type: integer
@@ -334,19 +381,13 @@ components:
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
                 self:
                   type: object
                   properties:
                     href:
                       type: string
-                      format: url
-      example:
-        idProducto: 1
-        descripcion: Bici molona
-        categoria:
-          idCategoria: 1
-          descripcion: Deporte
+                      format: uri
     Categoria:
       title: Categoria
       type: object
@@ -370,13 +411,13 @@ components:
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
                 self:
                   type: object
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
     Pedido:
       title: Pedido
       type: object
@@ -422,13 +463,13 @@ components:
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
                 self:
                   type: object
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
             organizacion:
               $ref: '#/components/schemas/Organizacion'
     Organizacion:
@@ -442,6 +483,7 @@ components:
               type: integer
               format: int64
               example: 32165478
+              minimum: 1
             nombre:
               type: string
             descripcion:
@@ -475,13 +517,14 @@ components:
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
                 self:
                   type: object
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
+      description: ''
     Evento:
       title: Evento
       type: object
@@ -517,13 +560,13 @@ components:
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
                 self:
                   type: object
                   properties:
                     href:
                       type: string
-                      format: url
+                      format: uri
     Message:
       type: object
       required:
@@ -557,7 +600,9 @@ components:
         format: int64
   headers:
     ETag:
-      $ref: '#/components/headers/ETag'
+      schema:
+        type: string
+      description: Entity Tag (unique identifier provided for cache validation)
     Allow:
       description: Lista de metodos HTTP soportados
       schema:
@@ -611,17 +656,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Message'
-          example:
-            code: 204
-            message: Borrado correcto
-  requestBodies:
-    PedidosRequest:
-      description: Pedido
-      required: true
-      content:
-        application/json:
+      headers:
+        Location:
+          description: '`uri` al nuevo recurso generado'
           schema:
-            $ref: '#/components/schemas/Pedido'
+            type: string
+      example:
+        code: 204
+        message: Borrado correcto
+  requestBodies:
     ProductosRequest:
       description: Producto
       required: true
@@ -629,3 +672,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Producto'
+    PedidoRequestBody:
+      description: Datos para generar un `Pedido`
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pedido'
+tags:
+  - name: Pedidos
+    description: Gestion de pedidos
+  - name: Productos
+    description: Getion de Productos
