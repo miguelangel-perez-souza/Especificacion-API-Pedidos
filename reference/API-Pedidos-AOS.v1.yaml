@@ -25,17 +25,20 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  pedidos:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Pedido'
-                required:
-                  - pedidos
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pedido'
           headers:
             Etag:
               $ref: '#/components/headers/ETag'
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
         '404':
           description: Not Found
       operationId: get-pedido
@@ -88,10 +91,18 @@ paths:
               schema:
                 type: string
               description: Cabecera Allow en donde van las operacions
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
       tags:
         - Pedidos
     post:
-      summary: Añadir Pedidos
+      summary: Añadir Pedido
       operationId: post-pedidos
       responses:
         '201':
@@ -103,9 +114,6 @@ paths:
         - Pedidos
       requestBody:
         $ref: '#/components/requestBodies/PedidoRequestBody'
-      headers:
-        Etag:
-          $ref: '#/components/headers/ETag'
   '/pedidos/{idPedido}':
     parameters:
       - $ref: '#/components/parameters/idPedido'
@@ -129,6 +137,14 @@ paths:
             Etag:
               schema:
                 type: string
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO/{ID_PEDIDO}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
         '400':
           description: idPedido no valido
         '404':
@@ -158,6 +174,14 @@ paths:
       responses:
         '202':
           description: Accepted
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO/{ID_PEDIDO}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
       tags:
         - Pedidos
     delete:
@@ -166,10 +190,34 @@ paths:
       responses:
         '200':
           description: OK
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO/{ID_PEDIDO}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
         '400':
           description: idPedido no valido
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO/{ID_PEDIDO}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "warn"
         '404':
           description: idPedido no encontrado
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO/{ID_PEDIDO}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "error"
       description: Elimina un pedido existente
       tags:
         - Pedidos
@@ -184,6 +232,14 @@ paths:
               schema:
                 type: string
               description: Lista de metodos HTTP soportados
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "PEDIDO/{ID_PEDIDO}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
       description: Devuelve la lista de métodos soportados HTTP
       tags:
         - Pedidos
@@ -203,15 +259,32 @@ paths:
                 properties:
                   stock:
                     type: integer
+                    minimum: 0
               examples:
                 ejemplo:
                   value:
                     stock: 10
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "/PRODUCTOS/STOCK_PRODUCTO/{idProducto}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
           headers:
             Etag:
               $ref: '#/components/headers/ETag'
         '404':
           description: Pedido no encontrado
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "/PRODUCTOS/STOCK_PRODUCTO/{idProducto}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "error"
       summary: Numero de unidades (stock) de una producto
       tags:
         - Productos
@@ -250,6 +323,14 @@ paths:
                 items:
                   $ref: '#/components/schemas/Producto'
                 type: array
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "/PRODUCTOS"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
         '401':
           $ref: '#/components/responses/401_logeado'
         '403':
@@ -278,6 +359,14 @@ paths:
           headers:
             Allow:
               $ref: '#/components/headers/Allow'
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "/PRODUCTOS"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
       tags:
         - Productos
       description: Devuelve la lista de métodos soportados HTTP
@@ -296,6 +385,14 @@ paths:
                 properties:
                   '':
                     $ref: '#/components/schemas/Producto'
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "/PRODUCTOS/{idProducto}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
           headers:
             Etag:
               $ref: '#/components/headers/ETag'
@@ -313,6 +410,14 @@ paths:
       responses:
         '200':
           description: OK
+          links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: "/PRODUCTOS/{idProducto}"
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
         '201':
           $ref: '#/components/responses/201_addOk'
         '409':
@@ -347,6 +452,41 @@ paths:
       description: Devuelve la lista de métodos soportados HTTP
       tags:
         - Productos
+  /registrarEvento:
+    parameters: []
+    get:
+      summary: ''
+      operationId: get-registrarEvento
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: origen
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: fecha
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: mensaje
+          required: true
+        - schema:
+            type: string
+            enum:
+              - info
+              - warn
+              - error
+          in: query
+          name: nivel
+          required: true
+      tags:
+        - Eventos
 components:
   schemas:
     Producto:
@@ -617,6 +757,14 @@ components:
           example:
             code: 401
             message: No esta identificado como usuario
+      links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: $url
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "error"
     403_permisos:
       description: No posee permisos
       content:
@@ -626,6 +774,14 @@ components:
           example:
             code: 403
             message: No posee permisos
+      links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: $url
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "error"
     404_noEncontrado:
       description: No encontrado
       content:
@@ -635,6 +791,14 @@ components:
           example:
             code: 404
             message: No encontrado
+      links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: $url
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "error"
     409_addError:
       description: 'Error al añadir, no añadido'
       content:
@@ -644,26 +808,47 @@ components:
           example:
             code: 409
             message: 'Error al añadir, no añadido'
+      links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: $url
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "error"
     201_addOk:
       description: Añadido correcto
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Producto'
+      links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: $url
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
     204_deleteOk:
       description: BorradoCorrecto
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Message'
+      links:
+            SaveEvent:
+              operationId: get-registrarEvento
+              parameters:
+                origen: $url
+                fecha: $response.header.date
+                mensaje: $response.body
+                nivel: "info"
       headers:
         Location:
           description: '`uri` al nuevo recurso generado'
           schema:
             type: string
-      example:
-        code: 204
-        message: Borrado correcto
   requestBodies:
     ProductosRequest:
       description: Producto
@@ -678,9 +863,35 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Pedido'
+            type: object
+            estado:
+              type: string
+              description: estado del pedido
+              enum:
+                - abierto
+                - aceptado
+                - enviado
+                - recibido
+            fechaCompra:
+              type: string
+              format: date-time
+            cantidad:
+              type: integer
+              format: int32
+              example: 23
+              minimum: 1
+            producto:
+              $ref: '#/components/schemas/Producto'
+            tipo:
+              type: string
+              description: indica si es pedido de compra o de venta
+              enum:
+                - compra
+                - venta
 tags:
   - name: Pedidos
     description: Gestion de pedidos
   - name: Productos
     description: Getion de Productos
+  - name: Eventos
+    description: Gestion de Eventos
