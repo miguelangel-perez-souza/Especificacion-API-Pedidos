@@ -2,6 +2,8 @@
 
 _El proyecto trata de especificar el modelo para la futura gestión de pedidos_
 
+_Realizado por Santiago Caro, Miguel Angel Perez & Ivan Pulido_
+
 ## Comenzando 🚀
 
 _Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
