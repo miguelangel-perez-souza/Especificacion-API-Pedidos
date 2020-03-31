@@ -3,6 +3,8 @@ info:
   title: API Pedidos AOS
   version: '1.0'
   description: "API de Pedidos para Arquitecturas Orientadas a Servicios desarrollada por:\nSantiago Caro, \nMiguel Angel Perez &\nIván Pulido"
+  contact:
+    name: 'Santiago Caro, Miguel Angel Perez & Iván Pulido'
 servers:
   - url: '{schema}://{servername}:{port}'
     variables:
@@ -14,7 +16,7 @@ servers:
       servername:
         default: localhost
       port:
-        default: '3100'
+        default: '4010'
 paths:
   /pedidos:
     get:
@@ -26,6 +28,7 @@ paths:
             application/json:
               schema:
                 type: array
+                description: Array de pedidos completa o filtrada
                 items:
                   $ref: '#/components/schemas/Pedido'
           headers:
@@ -44,7 +47,7 @@ paths:
         '403':
           $ref: '#/components/responses/403_permisos'
       operationId: get-pedido
-      description: Retorna una Lista de pedidos completa
+      description: 'Retorna una Lista de pedidos completa, tambien se puede buscar por campos especificos dentro del pedido, estos vienen como consultas dentro de la URL'
       tags:
         - Pedidos
       parameters:
@@ -84,7 +87,7 @@ paths:
     options:
       summary: Opciones soportadas
       operationId: options-pedidos
-      description: Provee una lista de los metodos HTTP soportados
+      description: Provee una lista de los metodos HTTP soportados en este PATH
       responses:
         '200':
           description: OK
@@ -93,6 +96,8 @@ paths:
               schema:
                 type: string
               description: Cabecera Allow en donde van las operacions
+            Etag:
+              $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
               operationId: post-registrarEvento
@@ -111,7 +116,7 @@ paths:
           $ref: '#/components/responses/201_addOk'
         '409':
           $ref: '#/components/responses/409_addError'
-      description: Añade un pedido con sus datos
+      description: 'Añade un pedido con sus datos, como cuerpo de la petición tiene que tener dentro un objeto de Pedido'
       tags:
         - Pedidos
       requestBody:
@@ -137,8 +142,7 @@ paths:
                 properties: {}
           headers:
             Etag:
-              schema:
-                type: string
+              $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
               operationId: post-registrarEvento
@@ -149,12 +153,18 @@ paths:
                 nivel: info
         '400':
           description: idPedido no valido
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '404':
           description: Pedido no encontrado
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
       operationId: get-pedidos-id_pedido
       description: Obtiene la información de un producto existente
       tags:
-        - Pedidos
+        - Pedido Especifico
     put:
       summary: Actualizar Pedido
       operationId: put-pedidos-id_pedido
@@ -184,8 +194,15 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: info
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
+        '401':
+          $ref: '#/components/responses/401_logeado'
+        '403':
+          $ref: '#/components/responses/403_permisos'
       tags:
-        - Pedidos
+        - Pedido Especifico
     delete:
       summary: ''
       operationId: delete-pedidos-id_pedido
@@ -200,6 +217,9 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: info
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '400':
           description: idPedido no valido
           links:
@@ -210,6 +230,9 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: warn
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '404':
           description: idPedido no encontrado
           links:
@@ -220,9 +243,12 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: error
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
       description: Elimina un pedido existente
       tags:
-        - Pedidos
+        - Pedido Especifico
     options:
       summary: ''
       operationId: options-pedidos-idPedido
@@ -234,6 +260,8 @@ paths:
               schema:
                 type: string
               description: Lista de metodos HTTP soportados
+            Etag:
+              $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
               operationId: post-registrarEvento
@@ -244,7 +272,7 @@ paths:
                 nivel: info
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Pedidos
+        - Pedido Especifico
   '/productos/stock_produto/{idProducto}':
     get:
       operationId: get-pedidos-stock_produto
@@ -287,9 +315,12 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: error
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
       summary: Numero de unidades (stock) de una producto
       tags:
-        - Productos
+        - Stock Producto
     parameters:
       - schema:
           type: string
@@ -305,9 +336,11 @@ paths:
           headers:
             Allow:
               $ref: '#/components/headers/Allow'
+            Etag:
+              $ref: '#/components/headers/ETag'
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Productos
+        - Stock Producto
   /productos:
     get:
       summary: Lista de productos
@@ -361,6 +394,8 @@ paths:
           headers:
             Allow:
               $ref: '#/components/headers/Allow'
+            Etag:
+              $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
               operationId: post-registrarEvento
@@ -385,7 +420,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  '':
+                  productos:
                     $ref: '#/components/schemas/Producto'
           links:
             SaveEvent:
@@ -405,7 +440,7 @@ paths:
       operationId: get-productos-idProducto
       description: Datos de un producto en concreto
       tags:
-        - Productos
+        - Producto Especifico
     put:
       summary: Modificar Producto
       operationId: put-productos-idProducto
@@ -420,13 +455,16 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: info
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '201':
           $ref: '#/components/responses/201_addOk'
         '409':
           $ref: '#/components/responses/409_addError'
       description: Modificar Producto
       tags:
-        - Productos
+        - Producto Especifico
     delete:
       summary: Borrar producto
       operationId: delete-productos-idProducto
@@ -441,7 +479,7 @@ paths:
           $ref: '#/components/responses/404_noEncontrado'
       description: Borrado de producto
       tags:
-        - Productos
+        - Producto Especifico
     options:
       summary: Operaciones sobre
       operationId: options-productos-idProducto
@@ -453,15 +491,18 @@ paths:
               $ref: '#/components/headers/Allow'
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Productos
+        - Producto Especifico
   /eventos:
     parameters: []
     post:
-      summary: ''
+      summary: Crear un evento
       operationId: post-registrarEvento
       responses:
         '200':
           description: OK
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '401':
           $ref: '#/components/responses/401_logeado'
         '403':
@@ -472,16 +513,19 @@ paths:
           in: query
           name: origen
           required: true
+          description: Origen de donde viene el evento
         - schema:
             type: string
           in: query
           name: fecha
           required: true
+          description: Fecha cuando se genero el evento
         - schema:
             type: string
           in: query
           name: mensaje
           required: true
+          description: Mensaje resultante del evento
         - schema:
             type: string
             enum:
@@ -491,10 +535,12 @@ paths:
           in: query
           name: nivel
           required: true
+          description: De que tipo fue la respuesta del evento
       tags:
         - Eventos
+      description: 'Con la información que llega por medio de los parametros dentro de la URL, crea un evento nuevo registrando algo que ocurrio dentro del servidor.'
     get:
-      summary: ''
+      summary: Eventos generados
       operationId: get-eventos
       responses:
         '200':
@@ -503,12 +549,19 @@ paths:
             application/json:
               schema:
                 type: array
+                description: Array de Eventos
                 items:
                   $ref: '#/components/schemas/Evento'
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '401':
           $ref: '#/components/responses/401_logeado'
         '403':
           $ref: '#/components/responses/403_permisos'
+      description: Devuelve en un array todos los eventos que han sido generados
+      tags:
+        - Eventos
   '/evento/{idEvento}':
     parameters:
       - schema:
@@ -517,8 +570,9 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
-      tags: []
+      summary: Obtener Evento Especifico
+      tags:
+        - Eventos
       responses:
         '200':
           description: OK
@@ -526,12 +580,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Evento'
-          headers: {}
+          headers:
+            Etag:
+              $ref: '#/components/headers/ETag'
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
       operationId: get-evento-idEvento
+      description: 'Dado un ID evento como parametro, se busca el evento con el respectivo ID y se retorna como objeto '
 components:
   schemas:
     Producto:
@@ -810,6 +867,9 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
+      headers:
+        Etag:
+          $ref: '#/components/headers/ETag'
     403_permisos:
       description: No posee permisos
       content:
@@ -827,6 +887,9 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
+      headers:
+        Etag:
+          $ref: '#/components/headers/ETag'
     404_noEncontrado:
       description: No encontrado
       content:
@@ -844,6 +907,9 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
+      headers:
+        Etag:
+          $ref: '#/components/headers/ETag'
     409_addError:
       description: 'Error al añadir, no añadido'
       content:
@@ -861,6 +927,9 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
+      headers:
+        Etag:
+          $ref: '#/components/headers/ETag'
     201_addOk:
       description: Añadido correcto
       content:
@@ -875,6 +944,9 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: info
+      headers:
+        Etag:
+          $ref: '#/components/headers/ETag'
     204_deleteOk:
       description: BorradoCorrecto
       content:
@@ -894,6 +966,8 @@ components:
           description: '`uri` al nuevo recurso generado'
           schema:
             type: string
+        Etag:
+          $ref: '#/components/headers/ETag'
   requestBodies:
     ProductosRequest:
       description: Producto
@@ -904,7 +978,6 @@ components:
             $ref: '#/components/schemas/Producto'
     PedidoRequestBody:
       description: Datos para generar un `Pedido`
-      required: true
       content:
         application/json:
           schema:
@@ -936,7 +1009,13 @@ components:
 tags:
   - name: Pedidos
     description: Gestion de pedidos
+  - name: Pedido Especifico
+    description: Gestion de un pedido en especifico
   - name: Productos
     description: Getion de Productos
+  - name: Producto Especifico
+    description: Gestion de un prducto en especifico
+  - name: Stock Producto
+    description: Operaciones sobre el stock de un producto
   - name: Eventos
     description: Gestion de Eventos
