@@ -12,6 +12,7 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 ### Clonado del proyecto 📋
 _En un GitBash se ejecutara el siguente comnando_
 
+```git clone  https://github.com/santiagocarod/Especificacion-API-Pedidos.git```
 
 ### Arranque de la especificación🔧
 
@@ -26,3 +27,7 @@ _Se ejecutaran los siguentes comandos para el arranque_
 ```docker run -p 80:8080 santiagocarod/api_ui_grupo3_pedidos```
 
 ## Ejecutando las pruebas ⚙️
+
+Entrar a ``` http://127.0.0.1 ``` y se pueden ver los metodos soportados con la interfaz gráfica de Swagger
+
+Tambien se puede ingresar a ``` http://127.0.0.1:4010/pedidos ``` para probar el metodo get de pedidos directamente al servidor.
