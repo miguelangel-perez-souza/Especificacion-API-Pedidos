@@ -22,9 +22,31 @@ _Se ejecutaran los siguentes comandos para el arranque_
 
 ```docker run -p 4010:4010 santiagocarod/api_mock_grupo3_pedidos```
 
+**Ó**
+
+en local:
+(dentro de la carpeta api):
+
+``` docker build -t api_mock_grupo3_pedidos . ```
+
+y despues :
+
+```docker run -p 4010:4010 api_mock_grupo3_pedidos```
+
 2. Para ejecutar la interfaz gráfica de **Swagger/UI**:
 
 ```docker run -p 80:8080 santiagocarod/api_ui_grupo3_pedidos```
+
+**Ó**
+
+en local:
+(fuera de la carpeta api):
+
+``` docker build -t api_ui_grupo3_pedidos . ```
+
+y despues :
+
+```docker run -p 80:8080 api_ui_grupo3_pedidos```
 
 ## Ejecutando las pruebas ⚙️
 
