@@ -142,9 +142,6 @@
                   "type": "string"
                 },
                 "description": "Cabecera Allow en donde van las operacions"
-              },
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
               }
             },
             "links": {
@@ -231,26 +228,16 @@
             }
           },
           "400": {
-            "description": "idPedido no valido",
-            "headers": {
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
-              }
-            }
+            "$ref": "#/components/responses/400_Bad_Request"
           },
           "404": {
-            "description": "Pedido no encontrado",
-            "headers": {
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
-              }
-            }
+            "$ref": "#/components/responses/404_noEncontrado"
           }
         },
         "operationId": "get-pedidos-id_pedido",
         "description": "Obtiene la información de un producto existente",
         "tags": [
-          "Pedido Especifico"
+          "Pedidos"
         ]
       },
       "put": {
@@ -307,7 +294,7 @@
           }
         },
         "tags": [
-          "Pedido Especifico"
+          "Pedidos"
         ]
       },
       "delete": {
@@ -334,23 +321,7 @@
             }
           },
           "400": {
-            "description": "idPedido no valido",
-            "links": {
-              "SaveEvent": {
-                "operationId": "post-registrarEvento",
-                "parameters": {
-                  "origen": "PEDIDO/{ID_PEDIDO}",
-                  "fecha": "$response.header.date",
-                  "mensaje": "$response.body",
-                  "nivel": "warn"
-                }
-              }
-            },
-            "headers": {
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
-              }
-            }
+            "$ref": "#/components/responses/400_Bad_Request"
           },
           "404": {
             "description": "idPedido no encontrado",
@@ -364,17 +335,12 @@
                   "nivel": "error"
                 }
               }
-            },
-            "headers": {
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
-              }
             }
           }
         },
         "description": "Elimina un pedido existente",
         "tags": [
-          "Pedido Especifico"
+          "Pedidos"
         ]
       },
       "options": {
@@ -389,9 +355,6 @@
                   "type": "string"
                 },
                 "description": "Lista de metodos HTTP soportados"
-              },
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
               }
             },
             "links": {
@@ -409,7 +372,7 @@
         },
         "description": "Devuelve la lista de métodos soportados HTTP",
         "tags": [
-          "Pedido Especifico"
+          "Pedidos"
         ]
       }
     },
@@ -474,17 +437,12 @@
                   "nivel": "error"
                 }
               }
-            },
-            "headers": {
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
-              }
             }
           }
         },
         "summary": "Numero de unidades (stock) de una producto",
         "tags": [
-          "Stock Producto"
+          "Productos"
         ]
       },
       "parameters": [
@@ -506,16 +464,13 @@
             "headers": {
               "Allow": {
                 "$ref": "#/components/headers/Allow"
-              },
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
               }
             }
           }
         },
         "description": "Devuelve la lista de métodos soportados HTTP",
         "tags": [
-          "Stock Producto"
+          "Productos"
         ]
       }
     },
@@ -593,9 +548,6 @@
             "headers": {
               "Allow": {
                 "$ref": "#/components/headers/Allow"
-              },
-              "Etag": {
-                "$ref": "#/components/headers/ETag"
               }
             },
             "links": {
@@ -667,7 +619,7 @@
         "operationId": "get-productos-idProducto",
         "description": "Datos de un producto en concreto",
         "tags": [
-          "Producto Especifico"
+          "Productos"
         ]
       },
       "put": {
@@ -702,7 +654,7 @@
         },
         "description": "Modificar Producto",
         "tags": [
-          "Producto Especifico"
+          "Productos"
         ]
       },
       "delete": {
@@ -724,7 +676,7 @@
         },
         "description": "Borrado de producto",
         "tags": [
-          "Producto Especifico"
+          "Productos"
         ]
       },
       "options": {
@@ -742,7 +694,7 @@
         },
         "description": "Devuelve la lista de métodos soportados HTTP",
         "tags": [
-          "Producto Especifico"
+          "Productos"
         ]
       }
     },
@@ -1267,6 +1219,31 @@
       }
     },
     "responses": {
+      "400_Bad_Request": {
+        "description": "identificador no valido",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Message"
+            },
+            "example": {
+              "code": 400,
+              "message": "No esta identificado como usuario"
+            }
+          }
+        },
+        "links": {
+          "SaveEvent": {
+            "operationId": "post-registrarEvento",
+            "parameters": {
+              "origen": "$url",
+              "fecha": "$response.header.date",
+              "mensaje": "$response.body",
+              "nivel": "error"
+            }
+          }
+        }
+      },
       "401_logeado": {
         "description": "No esta identificado como usuario",
         "content": {
@@ -1289,11 +1266,6 @@
               "mensaje": "$response.body",
               "nivel": "error"
             }
-          }
-        },
-        "headers": {
-          "Etag": {
-            "$ref": "#/components/headers/ETag"
           }
         }
       },
@@ -1320,11 +1292,6 @@
               "nivel": "error"
             }
           }
-        },
-        "headers": {
-          "Etag": {
-            "$ref": "#/components/headers/ETag"
-          }
         }
       },
       "404_noEncontrado": {
@@ -1350,11 +1317,6 @@
               "nivel": "error"
             }
           }
-        },
-        "headers": {
-          "Etag": {
-            "$ref": "#/components/headers/ETag"
-          }
         }
       },
       "409_addError": {
@@ -1379,11 +1341,6 @@
               "mensaje": "$response.body",
               "nivel": "error"
             }
-          }
-        },
-        "headers": {
-          "Etag": {
-            "$ref": "#/components/headers/ETag"
           }
         }
       },
@@ -1509,20 +1466,8 @@
       "description": "Gestion de pedidos"
     },
     {
-      "name": "Pedido Especifico",
-      "description": "Gestion de un pedido en especifico"
-    },
-    {
       "name": "Productos",
       "description": "Getion de Productos"
-    },
-    {
-      "name": "Producto Especifico",
-      "description": "Gestion de un prducto en especifico"
-    },
-    {
-      "name": "Stock Producto",
-      "description": "Operaciones sobre el stock de un producto"
     },
     {
       "name": "Eventos",

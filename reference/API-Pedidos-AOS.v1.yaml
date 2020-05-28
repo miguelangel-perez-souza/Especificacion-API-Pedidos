@@ -2,7 +2,11 @@ openapi: 3.0.0
 info:
   title: API Pedidos AOS
   version: '1.0'
-  description: "API de Pedidos para Arquitecturas Orientadas a Servicios desarrollada por:\nSantiago Caro, \nMiguel Angel Perez &\nIván Pulido"
+  description: |-
+    API de Pedidos para Arquitecturas Orientadas a Servicios desarrollada por:
+    Santiago Caro, 
+    Miguel Angel Perez &
+    Iván Pulido
   contact:
     name: 'Santiago Caro, Miguel Angel Perez & Iván Pulido'
 servers:
@@ -96,8 +100,6 @@ paths:
               schema:
                 type: string
               description: Cabecera Allow en donde van las operacions
-            Etag:
-              $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
               operationId: post-registrarEvento
@@ -152,19 +154,13 @@ paths:
                 mensaje: $response.body
                 nivel: info
         '400':
-          description: idPedido no valido
-          headers:
-            Etag:
-              $ref: '#/components/headers/ETag'
+          $ref: '#/components/responses/400_Bad_Request'
         '404':
-          description: Pedido no encontrado
-          headers:
-            Etag:
-              $ref: '#/components/headers/ETag'
+          $ref: '#/components/responses/404_noEncontrado'
       operationId: get-pedidos-id_pedido
       description: Obtiene la información de un producto existente
       tags:
-        - Pedido Especifico
+        - Pedidos
     put:
       summary: Actualizar Pedido
       operationId: put-pedidos-id_pedido
@@ -202,7 +198,7 @@ paths:
         '403':
           $ref: '#/components/responses/403_permisos'
       tags:
-        - Pedido Especifico
+        - Pedidos
     delete:
       summary: ''
       operationId: delete-pedidos-id_pedido
@@ -221,18 +217,7 @@ paths:
             Etag:
               $ref: '#/components/headers/ETag'
         '400':
-          description: idPedido no valido
-          links:
-            SaveEvent:
-              operationId: post-registrarEvento
-              parameters:
-                origen: 'PEDIDO/{ID_PEDIDO}'
-                fecha: $response.header.date
-                mensaje: $response.body
-                nivel: warn
-          headers:
-            Etag:
-              $ref: '#/components/headers/ETag'
+            $ref: '#/components/responses/400_Bad_Request'
         '404':
           description: idPedido no encontrado
           links:
@@ -243,12 +228,9 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: error
-          headers:
-            Etag:
-              $ref: '#/components/headers/ETag'
       description: Elimina un pedido existente
       tags:
-        - Pedido Especifico
+        - Pedidos
     options:
       summary: ''
       operationId: options-pedidos-idPedido
@@ -260,8 +242,6 @@ paths:
               schema:
                 type: string
               description: Lista de metodos HTTP soportados
-            Etag:
-              $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
               operationId: post-registrarEvento
@@ -272,7 +252,7 @@ paths:
                 nivel: info
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Pedido Especifico
+        - Pedidos
   '/productos/stock_produto/{idProducto}':
     get:
       operationId: get-pedidos-stock_produto
@@ -315,12 +295,9 @@ paths:
                 fecha: $response.header.date
                 mensaje: $response.body
                 nivel: error
-          headers:
-            Etag:
-              $ref: '#/components/headers/ETag'
       summary: Numero de unidades (stock) de una producto
       tags:
-        - Stock Producto
+        - Productos
     parameters:
       - schema:
           type: string
@@ -336,11 +313,9 @@ paths:
           headers:
             Allow:
               $ref: '#/components/headers/Allow'
-            Etag:
-              $ref: '#/components/headers/ETag'
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Stock Producto
+        - Productos
   /productos:
     get:
       summary: Lista de productos
@@ -394,8 +369,6 @@ paths:
           headers:
             Allow:
               $ref: '#/components/headers/Allow'
-            Etag:
-              $ref: '#/components/headers/ETag'
           links:
             SaveEvent:
               operationId: post-registrarEvento
@@ -440,7 +413,7 @@ paths:
       operationId: get-productos-idProducto
       description: Datos de un producto en concreto
       tags:
-        - Producto Especifico
+        - Productos
     put:
       summary: Modificar Producto
       operationId: put-productos-idProducto
@@ -464,7 +437,7 @@ paths:
           $ref: '#/components/responses/409_addError'
       description: Modificar Producto
       tags:
-        - Producto Especifico
+        - Productos
     delete:
       summary: Borrar producto
       operationId: delete-productos-idProducto
@@ -479,7 +452,7 @@ paths:
           $ref: '#/components/responses/404_noEncontrado'
       description: Borrado de producto
       tags:
-        - Producto Especifico
+        - Productos
     options:
       summary: Operaciones sobre
       operationId: options-productos-idProducto
@@ -491,7 +464,7 @@ paths:
               $ref: '#/components/headers/Allow'
       description: Devuelve la lista de métodos soportados HTTP
       tags:
-        - Producto Especifico
+        - Productos
   /eventos:
     parameters: []
     post:
@@ -850,6 +823,23 @@ components:
       schema:
         type: string
   responses:
+    400_Bad_Request:
+        description: identificador no valido
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+            example:
+              code: 400
+              message: No esta identificado como usuario
+        links:
+          SaveEvent:
+            operationId: post-registrarEvento
+            parameters:
+              origen: $url
+              fecha: $response.header.date
+              mensaje: $response.body
+              nivel: error
     401_logeado:
       description: No esta identificado como usuario
       content:
@@ -867,9 +857,6 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
-      headers:
-        Etag:
-          $ref: '#/components/headers/ETag'
     403_permisos:
       description: No posee permisos
       content:
@@ -887,9 +874,6 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
-      headers:
-        Etag:
-          $ref: '#/components/headers/ETag'
     404_noEncontrado:
       description: No encontrado
       content:
@@ -907,9 +891,6 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
-      headers:
-        Etag:
-          $ref: '#/components/headers/ETag'
     409_addError:
       description: 'Error al añadir, no añadido'
       content:
@@ -927,9 +908,6 @@ components:
             fecha: $response.header.date
             mensaje: $response.body
             nivel: error
-      headers:
-        Etag:
-          $ref: '#/components/headers/ETag'
     201_addOk:
       description: Añadido correcto
       content:
@@ -982,40 +960,35 @@ components:
         application/json:
           schema:
             type: object
-            estado:
-              type: string
-              description: estado del pedido
-              enum:
-                - abierto
-                - aceptado
-                - enviado
-                - recibido
-            fechaCompra:
-              type: string
-              format: date-time
-            cantidad:
-              type: integer
-              format: int32
-              example: 23
-              minimum: 1
-            producto:
-              $ref: '#/components/schemas/Producto'
-            tipo:
-              type: string
-              description: indica si es pedido de compra o de venta
-              enum:
-                - compra
-                - venta
+            properties:
+              estado:
+                type: string
+                description: estado del pedido
+                enum:
+                  - abierto
+                  - aceptado
+                  - enviado
+                  - recibido
+              fechaCompra:
+                type: string
+                format: date-time
+              cantidad:
+                type: integer
+                format: int32
+                example: 23
+                minimum: 1
+              producto:
+                $ref: '#/components/schemas/Producto'
+              tipo:
+                type: string
+                description: indica si es pedido de compra o de venta
+                enum:
+                  - compra
+                  - venta
 tags:
   - name: Pedidos
     description: Gestion de pedidos
-  - name: Pedido Especifico
-    description: Gestion de un pedido en especifico
   - name: Productos
     description: Getion de Productos
-  - name: Producto Especifico
-    description: Gestion de un prducto en especifico
-  - name: Stock Producto
-    description: Operaciones sobre el stock de un producto
   - name: Eventos
     description: Gestion de Eventos
