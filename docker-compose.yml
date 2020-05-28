@@ -1,0 +1,13 @@
+version: '3.7'
+
+services: 
+    swagger_ui:
+        image: santiagocarod/api_ui_grupo3_pedidos
+        restart: always
+        ports: 
+            - "8080:8080"
+    mock:
+        image: santiagocarod/api_mock_grupo3_pedidos
+        restart: always
+        ports: 
+            - "4010:4010"

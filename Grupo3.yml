@@ -1,0 +1,77 @@
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: grupo3api
+#   labels:
+#     app: web
+# spec:
+#   containers:
+#     - name: user-interface
+#       image: santiagocarod/api_ui_grupo3_pedidos
+#       ports:
+#         - containerPort: 8080
+#     - name: mock
+#       image: santiagocarod/api_mock_grupo3_pedidos
+#       ports:
+#         - containerPort: 4010
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: despliegue-pedidos
+spec:
+  selector:
+    matchLabels:
+      app: api-grupo3
+      role: master
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-grupo3
+        role: master
+    spec:
+      containers:
+        - name: mock
+          image: santiagocarod/api_mock_grupo3_pedidos
+          ports:
+            - containerPort: 4010
+        - name: api
+          image: santiagocarod/api_ui_grupo3_pedidos
+          ports:
+            - containerPort: 8080
+      volumes:
+        - name: openapivolume
+          persistentVolumeClaim:
+            claimName: openapivolume 
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openapivolume
+  labels:
+    app: api-grupo3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicio-grupo3
+spec:
+  selector:
+    app: api-grupo3
+  type: NodePort
+  ports:
+    - name: ui
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+    - name: mock
+      port: 4010
+      targetPort: 4010
+      nodePort: 30010 
