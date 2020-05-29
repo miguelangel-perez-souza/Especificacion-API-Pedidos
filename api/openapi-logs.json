@@ -17,7 +17,6 @@
     "servers": [
       {
         "url": "{schema}://{servername}:{port}",
-        "description": "[AOS] Logging API microservice mock server",
         "variables": {
           "schema": {
             "enum": [
