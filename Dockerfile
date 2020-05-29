@@ -1,7 +1,4 @@
 FROM swaggerapi/swagger-ui
-RUN mkdir /api/
-VOLUME /api/
-COPY /api/ /api/
-ENV SWAGGER_JSON /api/openapi.json
+COPY /api/*.json /usr/share/nginx/html/api/
 EXPOSE 8080
 
