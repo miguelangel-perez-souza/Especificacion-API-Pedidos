@@ -7,8 +7,7 @@
   },
   "servers": [
     {
-      "url": "{schema}://{servername}:{port}/",
-      "description": "AOS Server Practica 1",
+      "url": "{schema}://{servername}:{port}",
       "variables": {
         "schema": {
           "enum": [

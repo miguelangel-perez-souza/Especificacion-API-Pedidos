@@ -15,8 +15,7 @@
     ],
     "servers": [
       {
-        "url": "{schema}://{servername}:{port}/api/v1",
-        "description": "AOS Production server (uses live data)",
+        "url": "{schema}://{servername}:{port}",
         "variables": {
           "schema": {
             "enum": [
