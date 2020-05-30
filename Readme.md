@@ -52,6 +52,18 @@ y despues :
 
 ## Ejecutando las pruebas ⚙️
 
-Entrar a ``` http://127.0.0.1 ``` y se pueden ver los metodos soportados con la interfaz gráfica de Swagger
+Entrar a un navegador e introducir ``` http://127.0.0.1:8080 ``` y se pueden ver los metodos soportados con la interfaz gráfica de Swagger. Aparece por defecto la especificación de los pedidos.
 
-Tambien se puede ingresar a ``` http://127.0.0.1:4010/pedidos ``` para probar el metodo get de pedidos directamente al servidor.
+Para realizar los cambios de especificación y su respectiva simulación se deben de hacer los siguientes pasos:
+
+  **1**. En la **barra de navegación** del UI de Swagger introducir las rutas para cada especificación:\
+    - **Pedidos**: /api/openapi.json (defecto)\
+    - **Eventos**: /api/openapi-logs.json\
+    - **Facturación**: /api/openapi-factura.json\
+    - **Productos**: /api/openapi-productos.json\
+  
+  **2**. En la sección de **Server Variables** introducir los siguientes números dependiendo de la especificación:\
+    - **Pedidos**: 4010 (defecto)\
+    - **Eventos**: 4011\
+    - **Facturación**: 4012\
+    - **Productos**: 4013
