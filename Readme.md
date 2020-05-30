@@ -1,6 +1,6 @@
-# Gestion de pedidos
+# Especificación API Servicio completo
 
-_El proyecto trata de especificar el modelo para la futura gestión de pedidos_
+_El proyecto implementa la API de pedidos creada por el grupo 3 junto a las especificaciones de los demás equipos_
 
 _Realizado por Santiago Caro, Miguel Angel Perez & Ivan Pulido_
 
@@ -14,7 +14,7 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 ### Clonado del proyecto 📋
 _En un GitBash se ejecutara el siguente comnando_
 
-```git clone  https://github.com/santiagocarod/Especificacion-API-Pedidos.git```
+```git clone  https://github.com/miguelangel-perez-souza/Especificacion-API-Servicio-Completo.git```
 
 ### Arranque de la especificación🔧
 
@@ -22,33 +22,33 @@ _Se ejecutaran los siguentes comandos para el arranque_
 
 1. Para ejecutar el servidor de **prism** para realizar el **mock**:
 
-```docker run -p 4010:4010 santiagocarod/api_mock_grupo3_pedidos```
+```docker run -p 4010:4010 -p 4011:4011 -p 4012:4012 -p 4013:4013 mangel10/api-grupo3-servicio-completo-mock```
 
 **Ó**
 
 en local:
 (dentro de la carpeta api):
 
-``` docker build -t api_mock_grupo3_pedidos . ```
+``` docker build -t api_mock_grupo3_servicio_completo . ```
 
 y despues :
 
-```docker run -p 4010:4010 api_mock_grupo3_pedidos```
+```docker run --p 4010:4010 -p 4011:4011 -p 4012:4012 -p 4013:4013 api_mock_grupo3_servicio_completo```
 
 2. Para ejecutar la interfaz gráfica de **Swagger/UI**:
 
-```docker run -p 80:8080 santiagocarod/api_ui_grupo3_pedidos```
+```docker run -p 8080:8080 mangel10/api-grupo3-servicio-completo-ui```
 
 **Ó**
 
 en local:
 (fuera de la carpeta api):
 
-``` docker build -t api_ui_grupo3_pedidos . ```
+``` docker build -t api_ui_grupo3_servicio_completo . ```
 
 y despues :
 
-```docker run -p 80:8080 api_ui_grupo3_pedidos```
+```docker run -p 8080:8080 api_ui_grupo3_servicio_completo```
 
 ## Ejecutando las pruebas ⚙️
 
